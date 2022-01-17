@@ -1,5 +1,5 @@
 package Lesson2;
-
+//
 public class Converter {
     static int strConverter(String[][] strArray)
             throws MyArraySizeException, MyArrayDataException {
