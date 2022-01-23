@@ -23,6 +23,7 @@ public class HomeWorkCollection {
 
     private static void addPhoneBook() {
         System.out.println("Задание 2 :\n<<Телефонный справочник>>");
+        //System.out.println();
         Phonebook phonebook = new Phonebook();
 
         phonebook.add("Аистов", "111");
