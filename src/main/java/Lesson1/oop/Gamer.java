@@ -1,4 +1,4 @@
-package Lesson1;
+package Lesson1.oop;
 
 public interface Gamer {
 
