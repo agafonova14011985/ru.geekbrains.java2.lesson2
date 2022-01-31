@@ -1,4 +1,4 @@
-package Lesson2;
+package Lesson2.exception;
 //
 public class Converter {
     static int strConverter(String[][] strArray)

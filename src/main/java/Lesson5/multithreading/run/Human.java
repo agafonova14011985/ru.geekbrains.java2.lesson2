@@ -1,4 +1,6 @@
-package Lesson1;
+package Lesson5.multithreading.run;
+
+import Lesson1.oop.Gamer;
 
 public class Human implements Gamer {
     private String name;

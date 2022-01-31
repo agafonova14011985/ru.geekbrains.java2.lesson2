@@ -1,6 +1,9 @@
-package Lesson1;
+package Lesson5.multithreading.run;
 
 //класс - стена
+
+import Lesson1.oop.Gamer;
+import Lesson1.oop.Trap;
 
 public class Wall implements Trap {
     private final int height;

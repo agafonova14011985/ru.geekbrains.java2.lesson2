@@ -1,6 +1,9 @@
-package Lesson1;
+package Lesson5.multithreading.run;
 
 //класс - Трэк - беговая дорожка
+
+import Lesson1.oop.Gamer;
+import Lesson1.oop.Trap;
 
 public class Track implements Trap {
     private final int length;
