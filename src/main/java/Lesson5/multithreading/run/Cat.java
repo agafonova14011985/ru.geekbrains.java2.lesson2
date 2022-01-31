@@ -1,6 +1,6 @@
 package Lesson5.multithreading.run;
 
-import Lesson1.oop.Gamer;
+import Lesson5.multithreading.home_work2.oop.Gamer;
 
 public class Cat implements Gamer {
     private String name;

@@ -2,8 +2,8 @@ package Lesson5.multithreading.run;
 
 //класс - Трэк - беговая дорожка
 
-import Lesson1.oop.Gamer;
-import Lesson1.oop.Trap;
+import Lesson5.multithreading.home_work2.oop.Gamer;
+import Lesson5.multithreading.home_work2.oop.Trap;
 
 public class Track implements Trap {
     private final int length;

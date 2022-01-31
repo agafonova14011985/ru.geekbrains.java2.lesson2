@@ -1,4 +1,4 @@
-package Lesson1.oop;
+package Lesson5.multithreading.home_work2.oop;
 
 public class Robot implements Gamer {
     private String name;
