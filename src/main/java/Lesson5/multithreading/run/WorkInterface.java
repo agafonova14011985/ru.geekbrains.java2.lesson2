@@ -11,27 +11,27 @@ package Lesson5.multithreading.run;
 //а участников ограничения на бег и прыжки.
 // Если участник не смог пройти одно из препятствий, то дальше по списку он препятствий не идет.
 
-import Lesson1.oop.Cat;
-import Lesson1.oop.Gamer;
-import Lesson1.oop.Human;
-import Lesson1.oop.Robot;
-import Lesson1.oop.Track;
-import Lesson1.oop.Trap;
-import Lesson1.oop.Wall;
+import Lesson5.multithreading.home_work2.oop.Cat;
+import Lesson5.multithreading.home_work2.oop.Gamer;
+import Lesson5.multithreading.home_work2.oop.Human;
+import Lesson5.multithreading.home_work2.oop.Robot;
+import Lesson5.multithreading.home_work2.oop.Track;
+import Lesson5.multithreading.home_work2.oop.Trap;
+import Lesson5.multithreading.home_work2.oop.Wall;
 //не многопоточность все выполняется последовательно
 public class WorkInterface {
     public static void main(String[] args) throws InterruptedException{
 
         //Массив с игроками
-        Lesson1.oop.Gamer[] gamers = {
+        Gamer[] gamers = {
                 new Cat("Рыжий", 1, 2),
                 new Robot("Walli", 10000, 2),
                 new Human("Иван", 20, 4)
         };
 
         // Массив с испытаниями: 1 стена 2 м., 2
-        Lesson1.oop.Trap[] traps = {
-                new Lesson1.oop.Wall(2),
+        Trap[] traps = {
+                new Wall(2),
                 new Track(10000),
                 new Wall(3),};
 
