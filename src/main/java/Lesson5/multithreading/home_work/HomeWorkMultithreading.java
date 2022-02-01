@@ -1,5 +1,10 @@
 package Lesson5.multithreading.home_work;
-/*1. Необходимо написать два метода, которые делают следующее:
+
+import java.rmi.server.LogStream;
+import java.util.Arrays;
+
+/*
+1. Необходимо написать два метода, которые делают следующее:
 1) Создают одномерный длинный массив, например:
 
 static final int size = 10000000;
@@ -15,8 +20,7 @@ arr[i] = (float)(arr[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math
 
 Отличие первого метода от второго:
 Первый просто бежит по массиву и вычисляет значения.
-Второй разбивает массив на два массива,
-в двух потоках высчитывает новые значения и потом склеивает эти массивы обратно в один.
+Второй разбивает массив на два массива, в двух потоках высчитывает новые значения и потом склеивает эти массивы обратно в один.
 
 Пример деления одного массива на два:
 
@@ -30,9 +34,7 @@ System.arraycopy(a2, 0, arr, h, h);
 
 Примечание:
 System.arraycopy() – копирует данные из одного массива в другой:
-System.arraycopy(массив-источник,
-откуда начинаем брать данные из массива-источника,
-массив-назначение, откуда начинаем записывать данные в массив-назначение, сколько ячеек копируем)
+System.arraycopy(массив-источник, откуда начинаем брать данные из массива-источника, массив-назначение, откуда начинаем записывать данные в массив-назначение, сколько ячеек копируем)
 По замерам времени:
 Для первого метода надо считать время только на цикл расчета:
 
@@ -40,61 +42,103 @@ for (int i = 0; i < size; i++) {
 arr[i] = (float)(arr[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
 }
 
-Для второго метода замеряете время разбивки массива на 2,
-просчета каждого из двух массивов и склейки.*/
-
+Для второго метода замеряете время разбивки массива на 2, просчета каждого из двух массивов и склейки.
+ */
 public class HomeWorkMultithreading {
+    private static final int size = 10000000;
+    private static final int h = size / 2;
+    private static float[] arr = new float[size];
 
-    public static void main(String s[]) {
+    public static void main(String[] args) {
 
-      //  System.out.println("поток :" + Thread.currentThread().getName());
-        HomeWorkMultithreading h = new HomeWorkMultithreading();
-        h.runOneThread();
-        h.runTwoThreads();
+        for (int i = 0; i < size; i++) {
+            arr[i] = 1;
+        }
 
+        singleThread(arr);
+        multiThread(arr);
 
     }
 
-        static final int SIZE = 10000000;
-        static final int H = SIZE / 2;
 
-        //цикл с расчетной формулой
-        public float[] calculate(float[] arr) {
-            for (int i = 0; i < arr.length; i++)
-                arr[i] = (float)
-                        (arr[i] * Math.sin(0.2f + arr[i] / 5) * Math.cos(0.2f + arr[i] / 5) * Math.cos(0.4f + arr[i] / 2));
+    //работа одного потока
+    private static void singleThread(float[] arr) {
+        long a = System.currentTimeMillis();
+
+        for (int i = 0; i < size; i++) {
+            arr[i] = (float)
+                    (arr[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
+        }
+        long singleTime = System.currentTimeMillis() - a;
+        System.out.println(singleTime + " - Время  однопоточных вычислений");
+    }
+
+
+    private static void multiThread(float[] arr) {
+        float[] a = new float[h];
+        float[] b = new float[h];
+
+        long start = System.currentTimeMillis();
+
+        System.arraycopy(arr, 0, a, 0, h);
+        System.arraycopy(arr, h, b, 0, h);
+
+        MyThread t1 = new MyThread("a", a);
+        MyThread t2 = new MyThread("b", b);
+
+        t1.start();
+        t2.start();
+
+
+        try {
+            t1.join();
+            t2.join();
+        } catch (InterruptedException e) {// ловим
+            e.printStackTrace();
+        }
+
+        a = t1.getArr();
+        b = t2.getArr();
+
+        System.arraycopy(a, 0, arr, 0, h);
+        System.arraycopy(b, 0, arr, a.length, b.length);
+
+        long multiTime = System.currentTimeMillis() - start;
+
+        System.out.printf(multiTime + "  - Время выполнения при многопоточных вычислениях");
+    }
+
+
+}
+
+
+    class MyThread extends Thread {
+        private float[] arr;
+
+        MyThread(String name, float[] arr) {
+            super(name);
+            this.arr = arr;
+        }
+
+        float[] getArr() {
             return arr;
         }
 
-        //метод 1./
-        public void runOneThread() {
-            float[] arr = new float[SIZE];
-            for (int i = 0; i < arr.length; i++) arr[i] = 1.0f;
-            long a = System.currentTimeMillis();
-            calculate(arr);
-            System.out.println("Время работы 1 метода: "
-                    + (System.currentTimeMillis() - a));
+        @Override
+       public void run() {
+            calculate();
         }
 
-        //метод 2./
-        public void runTwoThreads() {
-            float[] arr = new float[SIZE];
-            float[] arr1 = new float[H];
-            float[] arr2 = new float[H];
-            for (int i = 0; i < arr.length; i++) arr[i] = 1.0f;
+        private void calculate() {
+            int len = arr.length;
 
-            long a = System.currentTimeMillis();
-            System.arraycopy(arr, 0, arr1, 0, H);
-            System.arraycopy(arr, H, arr2, 0, H);
-
-            System.arraycopy(arr1, 0, arr, 0, H);
-            System.arraycopy(arr2, 0, arr, H, H);
-            System.out.println("Время работы 2 метода: " + (System.currentTimeMillis() - a));
-
+            for (int i = 0; i < len; i++) {
+                arr[i] = (float) (arr[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
+            }
 
         }
-
-
-
     }
+/*
+
+ */
 
